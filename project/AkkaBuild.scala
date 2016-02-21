@@ -392,7 +392,8 @@ object AkkaBuild extends Build {
         }
         executeMvnCommands("Osgi sample Dining hakkers test failed", "clean", "install")
       }}
-    ) ++ dontPublishSettings)
+    ) ++ dontPublishSettings
+  )
 
   val dontPublishSettings = Seq(
     publishSigned := (),
