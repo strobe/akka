@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009-2016 Typesafe Inc. <http://www.typesafe.com>
+ * Copyright (C) 2009-2016 Lightbend Inc. <http://www.lightbend.com>
  */
 
 package akka.http.impl.engine.server
@@ -22,6 +22,7 @@ import headers._
 import HttpEntity._
 import MediaTypes._
 import HttpMethods._
+import akka.testkit.AkkaSpec
 
 class HttpServerSpec extends AkkaSpec(
   """akka.loggers = []
@@ -354,7 +355,7 @@ class HttpServerSpec extends AkkaSpec(
       }
     }
 
-    "proceed to next request once previous request's entity has beed drained" in new TestSetup with ScalaFutures {
+    "proceed to next request once previous request's entity has beed drained" in new TestSetup {
       def twice(action: => Unit): Unit = { action; action }
 
       twice {
@@ -369,7 +370,7 @@ class HttpServerSpec extends AkkaSpec(
                |""")
 
         val whenComplete = expectRequest().entity.dataBytes.runWith(Sink.ignore)
-        whenComplete.futureValue should be (akka.Done)
+        whenComplete.futureValue should be(akka.Done)
       }
     }
 

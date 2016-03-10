@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Typesafe Inc. <http://www.typesafe.com>
+ * Copyright (C) 2016 Lightbend Inc. <http://www.lightbend.com>
  */
 package akka.http.impl.engine.server
 
@@ -13,7 +13,6 @@ import akka.stream.scaladsl.{ Sink, Source, Flow }
 import akka.stream.testkit.{ TestSubscriber, TestPublisher }
 import akka.testkit.AkkaSpec
 import akka.util.ByteString
-import org.scalatest.{ Matchers, WordSpec }
 import scala.concurrent.duration._
 
 class PrepareRequestsSpec extends AkkaSpec {

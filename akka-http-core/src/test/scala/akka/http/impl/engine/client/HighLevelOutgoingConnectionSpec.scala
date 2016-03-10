@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009-2016 Typesafe Inc. <http://www.typesafe.com>
+ * Copyright (C) 2009-2016 Lightbend Inc. <http://www.lightbend.com>
  */
 
 package akka.http.impl.engine.client
@@ -10,15 +10,14 @@ import scala.concurrent.Await
 import scala.concurrent.duration._
 import akka.stream.{ ActorMaterializerSettings, FlowShape, ActorMaterializer }
 import akka.stream.scaladsl._
-import akka.stream.testkit.AkkaSpec
+import akka.testkit.AkkaSpec
 import akka.http.scaladsl.{ Http, TestUtils }
 import akka.http.scaladsl.model._
 import akka.stream.testkit.Utils
 import org.scalatest.concurrent.ScalaFutures
 
-class HighLevelOutgoingConnectionSpec extends AkkaSpec with ScalaFutures {
+class HighLevelOutgoingConnectionSpec extends AkkaSpec {
   implicit val materializer = ActorMaterializer(ActorMaterializerSettings(system).withFuzzing(true))
-  implicit val patience = PatienceConfig(1.second)
 
   "The connection-level client implementation" should {
 
@@ -91,5 +90,6 @@ class HighLevelOutgoingConnectionSpec extends AkkaSpec with ScalaFutures {
       a[One2OneBidiFlow.OutputTruncationException.type] should be thrownBy Await.result(x, 3.second)
       binding.futureValue.unbind()
     }
+
   }
 }

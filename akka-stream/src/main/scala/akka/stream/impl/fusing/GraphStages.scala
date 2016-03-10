@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-2016 Typesafe Inc. <http://www.typesafe.com>
+ * Copyright (C) 2015-2016 Lightbend Inc. <http://www.lightbend.com>
  */
 package akka.stream.impl.fusing
 
@@ -46,7 +46,7 @@ private[akka] final case class GraphStageModule(shape: Shape,
 object GraphStages {
 
   /**
-   * INERNAL API
+   * INTERNAL API
    */
   private[akka] abstract class SimpleLinearGraphStage[T] extends GraphStage[FlowShape[T, T]] {
     val in = Inlet[T](Logging.simpleName(this) + ".in")
@@ -73,7 +73,7 @@ object GraphStages {
   def identity[T] = Identity.asInstanceOf[SimpleLinearGraphStage[T]]
 
   /**
-   * INERNAL API
+   * INTERNAL API
    */
   private[stream] final class Detacher[T] extends GraphStage[FlowShape[T, T]] {
     val in = Inlet[T]("Detacher.in")

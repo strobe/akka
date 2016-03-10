@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-2016 Typesafe Inc. <http://www.typesafe.com>
+ * Copyright (C) 2015-2016 Lightbend Inc. <http://www.lightbend.com>
  */
 package akka.stream.impl
 
@@ -9,7 +9,6 @@ import akka.stream.Attributes._
 import akka.stream.Supervision.Decider
 import akka.stream._
 import akka.stream.impl.StreamLayout._
-import akka.stream.scaladsl.Source
 import akka.stream.stage.AbstractStage.PushPullGraphStage
 import akka.stream.stage.Stage
 import org.reactivestreams.Processor
@@ -182,10 +181,6 @@ private[stream] object Stages {
 
   final case class Take[T](n: Long, attributes: Attributes = take) extends SymbolicStage[T, T] {
     override def create(attr: Attributes): Stage[T, T] = fusing.Take(n)
-  }
-
-  final case class Drop[T](n: Long, attributes: Attributes = drop) extends SymbolicStage[T, T] {
-    override def create(attr: Attributes): Stage[T, T] = fusing.Drop(n)
   }
 
   final case class TakeWhile[T](p: T ⇒ Boolean, attributes: Attributes = takeWhile) extends SymbolicStage[T, T] {

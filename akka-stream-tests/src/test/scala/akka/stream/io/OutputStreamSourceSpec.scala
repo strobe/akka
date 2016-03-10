@@ -1,11 +1,10 @@
 /**
- * Copyright (C) 2015-2016 Typesafe Inc. <http://www.typesafe.com>
+ * Copyright (C) 2015-2016 Lightbend Inc. <http://www.lightbend.com>
  */
 package akka.stream.io
 
 import java.io.IOException
 import java.util.concurrent.TimeoutException
-
 import akka.actor.ActorSystem
 import akka.stream._
 import akka.stream.Attributes.inputBuffer
@@ -18,11 +17,11 @@ import akka.stream.testkit._
 import akka.stream.testkit.scaladsl.TestSink
 import akka.testkit.TestProbe
 import akka.util.ByteString
-
 import scala.concurrent.duration.Duration.Zero
 import scala.concurrent.duration._
 import scala.concurrent.{ Await, Future }
 import scala.util.Random
+import akka.testkit.AkkaSpec
 
 class OutputStreamSourceSpec extends AkkaSpec(UnboundedMailboxConfig) {
   import system.dispatcher

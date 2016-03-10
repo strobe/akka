@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-2016 Typesafe Inc. <http://www.typesafe.com>
+ * Copyright (C) 2015-2016 Lightbend Inc. <http://www.lightbend.com>
  */
 package akka.stream.impl.io
 
@@ -7,13 +7,10 @@ import java.io.InputStream
 
 import akka.Done
 import akka.actor.{ Deploy, ActorLogging, DeadLetterSuppression, Props }
-import akka.io.DirectByteBufferPool
 import akka.stream.actor.ActorPublisherMessage
 import akka.stream.IOResult
 import akka.util.ByteString
-import akka.util.ByteString.ByteString1C
 
-import scala.annotation.tailrec
 import scala.concurrent.Promise
 import scala.util.{ Failure, Success }
 

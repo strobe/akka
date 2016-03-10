@@ -1,21 +1,20 @@
 /**
- * Copyright (C) 2015-2016 Typesafe Inc. <http://www.typesafe.com>
+ * Copyright (C) 2015-2016 Lightbend Inc. <http://www.lightbend.com>
  */
 package akka.http.impl.util
 
 import java.util.concurrent.atomic.AtomicInteger
-
 import akka.NotUsed
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.{ Flow, Keep, Sink, Source }
 import akka.stream.testkit.Utils._
-import akka.stream.testkit.{ AkkaSpec, _ }
+import akka.stream.testkit._
 import org.scalactic.ConversionCheckedTripleEquals
-
 import scala.concurrent.Await
 import scala.concurrent.duration._
+import akka.testkit.AkkaSpec
 
-class One2OneBidiFlowSpec extends AkkaSpec with ConversionCheckedTripleEquals {
+class One2OneBidiFlowSpec extends AkkaSpec {
   implicit val materializer = ActorMaterializer()
 
   "A One2OneBidiFlow" must {

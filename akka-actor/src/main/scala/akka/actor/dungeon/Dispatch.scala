@@ -1,11 +1,11 @@
 /**
- * Copyright (C) 2009-2016 Typesafe Inc. <http://www.typesafe.com>
+ * Copyright (C) 2009-2016 Lightbend Inc. <http://www.lightbend.com>
  */
 
 package akka.actor.dungeon
 
 import scala.annotation.tailrec
-import akka.dispatch.{ MessageDispatcher, Mailbox, Envelope }
+import akka.dispatch.{ Mailbox, Envelope }
 import akka.dispatch.sysmsg._
 import akka.event.Logging.Error
 import akka.util.Unsafe

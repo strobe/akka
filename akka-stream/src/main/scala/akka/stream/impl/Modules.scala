@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-2016 Typesafe Inc. <http://www.typesafe.com>
+ * Copyright (C) 2015-2016 Lightbend Inc. <http://www.lightbend.com>
  */
 package akka.stream.impl
 
@@ -11,7 +11,6 @@ import org.reactivestreams._
 
 import scala.annotation.unchecked.uncheckedVariance
 import scala.concurrent.Promise
-import scala.language.postfixOps
 
 /**
  * INTERNAL API

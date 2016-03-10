@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-2016 Typesafe Inc. <http://www.typesafe.com>
+ * Copyright (C) 2015-2016 Lightbend Inc. <http://www.lightbend.com>
  */
 package docs.stream
 
@@ -8,8 +8,8 @@ import akka.stream.scaladsl.{ Keep, Sink, Flow, Source }
 import akka.stream.stage._
 import akka.stream._
 
-import akka.stream.testkit.{ TestPublisher, TestSubscriber, AkkaSpec }
-import akka.testkit.TestLatch
+import akka.stream.testkit.{ TestPublisher, TestSubscriber }
+import akka.testkit.{ AkkaSpec, TestLatch }
 
 import scala.collection.mutable
 import scala.concurrent.{ Promise, Await, Future }
@@ -73,7 +73,7 @@ class GraphStageDocSpec extends AkkaSpec {
     val sourceGraph: Graph[SourceShape[Int], NotUsed] = new NumbersSource
 
     // Create a Source from the Graph to access the DSL
-    val mySource: Source[Int, NotUsed] = Source.fromGraph(new NumbersSource)
+    val mySource: Source[Int, NotUsed] = Source.fromGraph(sourceGraph)
 
     // Returns 55
     val result1: Future[Int] = mySource.take(10).runFold(0)(_ + _)

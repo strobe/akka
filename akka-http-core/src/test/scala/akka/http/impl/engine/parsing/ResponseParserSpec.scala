@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2016 Typesafe Inc. <http://www.typesafe.com>
+ * Copyright (C) 2009-2016 Lightbend Inc. <http://www.lightbend.com>
  */
 
 package akka.http.impl.engine.parsing
@@ -312,7 +312,7 @@ class ResponseParserSpec extends FreeSpec with Matchers with BeforeAndAfterAll {
 
     def newParserStage(requestMethod: HttpMethod = GET) = {
       val parser = new HttpResponseParser(parserSettings, HttpHeaderParser(parserSettings)())
-      parser.setRequestMethodForNextResponse(requestMethod)
+      parser.setContextForNextResponse(HttpResponseParser.ResponseContext(requestMethod, None))
       parser.stage
     }
 

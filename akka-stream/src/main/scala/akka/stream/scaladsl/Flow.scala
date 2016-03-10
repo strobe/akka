@@ -1,16 +1,14 @@
 /**
- * Copyright (C) 2014-2016 Typesafe Inc. <http://www.typesafe.com>
+ * Copyright (C) 2014-2016 Lightbend Inc. <http://www.lightbend.com>
  */
 package akka.stream.scaladsl
 
 import akka.event.LoggingAdapter
-import akka.stream.Attributes._
 import akka.stream._
 import akka.Done
 import akka.stream.impl.Stages.{ DirectProcessor, StageModule }
-import akka.stream.impl.StreamLayout.{ EmptyModule, Module }
+import akka.stream.impl.StreamLayout.{ Module }
 import akka.stream.impl._
-import akka.stream.impl.fusing.GraphStages.TerminationWatcher
 import akka.stream.impl.fusing._
 import akka.stream.stage.AbstractStage.{ PushPullGraphStage, PushPullGraphStageWithMaterializedValue }
 import akka.stream.stage._
@@ -18,7 +16,7 @@ import org.reactivestreams.{ Processor, Publisher, Subscriber, Subscription }
 import scala.annotation.unchecked.uncheckedVariance
 import scala.collection.immutable
 import scala.concurrent.Future
-import scala.concurrent.duration.{ Duration, FiniteDuration }
+import scala.concurrent.duration.{ FiniteDuration }
 import scala.language.higherKinds
 import akka.stream.impl.fusing.FlattenMerge
 
@@ -526,7 +524,7 @@ trait FlowOps[+Out, +Mat] {
   /**
    * Transform this stream by applying the given function to each of the elements
    * as they pass through this processing step. The function returns a `Future` and the
-   * value of that future will be emitted downstreams. As many futures as requested elements by
+   * value of that future will be emitted downstream. As many futures as requested elements by
    * downstream may run in parallel and each processed element will be emitted downstream
    * as soon as it is ready, i.e. it is possible that the elements are not emitted downstream
    * in the same order as received from upstream.
@@ -889,7 +887,8 @@ trait FlowOps[+Out, +Mat] {
    *
    * '''Cancels when''' downstream cancels
    */
-  def drop(n: Long): Repr[Out] = andThen(Drop(n))
+  def drop(n: Long): Repr[Out] =
+    via(Drop[Out](n))
 
   /**
    * Discard the elements received within the given duration at beginning of the stream.
@@ -1067,7 +1066,7 @@ trait FlowOps[+Out, +Mat] {
    *
    * '''Emits when''' downstream stops backpressuring
    *
-   * '''Backpressures when''' downstream backpressures or iterator runs emtpy
+   * '''Backpressures when''' downstream backpressures or iterator runs empty
    *
    * '''Completes when''' upstream completes
    *
@@ -1105,6 +1104,7 @@ trait FlowOps[+Out, +Mat] {
    * This operator makes it possible to extend the `Flow` API when there is no specialized
    * operator that performs the transformation.
    */
+  @deprecated("Use via(GraphStage) instead.", "2.4.3")
   def transform[T](mkStage: () ⇒ Stage[Out, T]): Repr[T] =
     via(new PushPullGraphStage((attr) ⇒ mkStage(), Attributes.none))
 
@@ -1296,7 +1296,7 @@ trait FlowOps[+Out, +Mat] {
    * is [[akka.stream.Supervision.Resume]] or [[akka.stream.Supervision.Restart]]
    * the element is dropped and the stream and substreams continue.
    *
-   * '''Emits when''' an element passes through. When the provided predicate is true it emitts the element
+   * '''Emits when''' an element passes through. When the provided predicate is true it emits the element
    * and opens a new substream for subsequent element
    *
    * '''Backpressures when''' there is an element pending for the next substream, but the previous
@@ -1430,7 +1430,7 @@ trait FlowOps[+Out, +Mat] {
    *
    * Throttle implements the token bucket model. There is a bucket with a given token capacity (burst size or maximumBurst).
    * Tokens drops into the bucket at a given rate and can be `spared` for later use up to bucket capacity
-   * to allow some burstyness. Whenever stream wants to send an element, it takes as many
+   * to allow some burstiness. Whenever stream wants to send an element, it takes as many
    * tokens from the bucket as number of elements. If there isn't any, throttle waits until the
    * bucket accumulates enough tokens. Bucket is full when stream just materialized and started.
    *
@@ -1458,7 +1458,7 @@ trait FlowOps[+Out, +Mat] {
    *
    * Throttle implements the token bucket model. There is a bucket with a given token capacity (burst size or maximumBurst).
    * Tokens drops into the bucket at a given rate and can be `spared` for later use up to bucket capacity
-   * to allow some burstyness. Whenever stream wants to send an element, it takes as many
+   * to allow some burstiness. Whenever stream wants to send an element, it takes as many
    * tokens from the bucket as element cost. If there isn't any, throttle waits until the
    * bucket accumulates enough tokens. Elements that costs more than the allowed burst will be delayed proportionally
    * to their cost minus available tokens, meeting the target rate.

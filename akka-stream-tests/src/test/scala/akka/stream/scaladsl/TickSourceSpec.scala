@@ -1,15 +1,13 @@
 /**
- * Copyright (C) 2014-2016 Typesafe Inc. <http://www.typesafe.com>
+ * Copyright (C) 2014-2016 Lightbend Inc. <http://www.lightbend.com>
  */
 package akka.stream.scaladsl
 
-import akka.actor.Cancellable
-
 import scala.concurrent.duration._
-import scala.util.control.NoStackTrace
-import akka.stream.{ ClosedShape, ActorMaterializer, ActorMaterializerSettings }
+import akka.stream.{ ClosedShape, ActorMaterializer }
 import akka.stream.testkit._
 import akka.stream.testkit.Utils._
+import akka.testkit.AkkaSpec
 
 class TickSourceSpec extends AkkaSpec {
 

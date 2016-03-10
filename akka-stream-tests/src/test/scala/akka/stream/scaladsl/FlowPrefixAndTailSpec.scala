@@ -1,17 +1,16 @@
 /**
- * Copyright (C) 2009-2016 Typesafe Inc. <http://www.typesafe.com>
+ * Copyright (C) 2009-2016 Lightbend Inc. <http://www.lightbend.com>
  */
 package akka.stream.scaladsl
 
 import scala.collection.immutable
-import scala.concurrent.{ Future, Await }
+import scala.concurrent.{ Await }
 import scala.concurrent.duration._
-import scala.util.Try
 import scala.util.control.NoStackTrace
 import akka.stream._
-import org.reactivestreams.Subscriber
 import akka.stream.testkit._
 import akka.stream.testkit.Utils._
+import akka.testkit.AkkaSpec
 
 class FlowPrefixAndTailSpec extends AkkaSpec {
 

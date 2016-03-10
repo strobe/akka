@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2016 Typesafe Inc. <http://www.typesafe.com>
+ * Copyright (C) 2009-2016 Lightbend Inc. <http://www.lightbend.com>
  */
 
 package akka.dispatch
@@ -8,14 +8,9 @@ import akka.event.Logging.Error
 import akka.actor.ActorCell
 import akka.event.Logging
 import akka.dispatch.sysmsg.SystemMessage
-import java.util.concurrent.atomic.AtomicReference
 import java.util.concurrent.{ ExecutorService, RejectedExecutionException }
-import scala.concurrent.forkjoin.ForkJoinPool
 import scala.concurrent.duration.Duration
-import scala.concurrent.Awaitable
 import scala.concurrent.duration.FiniteDuration
-import scala.annotation.tailrec
-import java.lang.reflect.ParameterizedType
 
 /**
  * The event-based ``Dispatcher`` binds a set of Actors to a thread pool backed up by a

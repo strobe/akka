@@ -1,17 +1,16 @@
 /**
- * Copyright (C) 2015-2016 Typesafe Inc. <http://www.typesafe.com>
+ * Copyright (C) 2015-2016 Lightbend Inc. <http://www.lightbend.com>
  */
 package akka.stream.impl.fusing
 
 import scala.util.control.NoStackTrace
 import akka.stream.Supervision
 import akka.stream.stage.Context
-import akka.stream.stage.Directive
 import akka.stream.stage.PushPullStage
 import akka.stream.stage.Stage
 import akka.stream.stage.TerminationDirective
 import akka.stream.stage.SyncDirective
-import akka.stream.testkit.AkkaSpec
+import akka.testkit.AkkaSpec
 
 object InterpreterSupervisionSpec {
   val TE = new Exception("TEST") with NoStackTrace {

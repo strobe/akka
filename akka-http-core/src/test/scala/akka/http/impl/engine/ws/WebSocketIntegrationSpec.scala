@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-2016 Typesafe Inc. <http://www.typesafe.com>
+ * Copyright (C) 2015-2016 Lightbend Inc. <http://www.lightbend.com>
  */
 package akka.http.impl.engine.ws
 
@@ -20,16 +20,12 @@ import org.scalatest.concurrent.Eventually
 import java.net.InetSocketAddress
 import akka.stream.impl.fusing.GraphStages
 import akka.util.ByteString
-import akka.http.scaladsl.model.StatusCodes
 import akka.stream.testkit.scaladsl.TestSink
-import scala.concurrent.Future
-import akka.testkit.EventFilter
+import akka.testkit.{ AkkaSpec, EventFilter }
 
 class WebSocketIntegrationSpec extends AkkaSpec("akka.stream.materializer.debug.fuzzing-mode=off")
-  with ScalaFutures with ConversionCheckedTripleEquals with Eventually {
+  with Eventually {
 
-  implicit val patience = PatienceConfig(3.seconds)
-  import system.dispatcher
   implicit val materializer = ActorMaterializer()
 
   "A WebSocket server" must {

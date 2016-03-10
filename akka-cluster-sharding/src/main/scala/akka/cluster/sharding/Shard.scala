@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2016 Typesafe Inc. <http://www.typesafe.com>
+ * Copyright (C) 2009-2016 Lightbend Inc. <http://www.lightbend.com>
  */
 package akka.cluster.sharding
 
@@ -9,7 +9,7 @@ import akka.actor.ActorRef
 import akka.actor.Deploy
 import akka.actor.Props
 import akka.actor.Terminated
-import akka.cluster.sharding.Shard.{ GetCurrentShardState, ShardCommand }
+import akka.cluster.sharding.Shard.{ ShardCommand }
 import akka.persistence.PersistentActor
 import akka.persistence.SnapshotOffer
 import akka.actor.Actor

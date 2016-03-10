@@ -1,14 +1,11 @@
 /**
- * Copyright (C) 2009-2016 Typesafe Inc. <http://www.typesafe.com>
+ * Copyright (C) 2009-2016 Lightbend Inc. <http://www.lightbend.com>
  */
 package akka.stream.impl.fusing
 
-import akka.NotUsed
 import akka.stream.impl.ConstantFun
-import akka.stream.{ Attributes, Shape, Supervision }
-import akka.stream.stage.AbstractStage.PushPullGraphStage
-import akka.stream.stage.GraphStageWithMaterializedValue
-import akka.stream.testkit.AkkaSpec
+import akka.stream.Supervision
+import akka.testkit.AkkaSpec
 
 class InterpreterStressSpec extends AkkaSpec with GraphInterpreterSpecKit {
   import Supervision.stoppingDecider
@@ -18,6 +15,9 @@ class InterpreterStressSpec extends AkkaSpec with GraphInterpreterSpecKit {
   val repetition = 100
 
   val map = Map((x: Int) ⇒ x + 1, stoppingDecider).toGS
+
+  // GraphStage can be reused
+  val dropOne = Drop(1)
 
   "Interpreter" must {
 
@@ -83,7 +83,7 @@ class InterpreterStressSpec extends AkkaSpec with GraphInterpreterSpecKit {
 
     }
 
-    "work with a massive chain of drops" in new OneBoundedSetup[Int](Vector.fill(chainLength / 1000)(Drop(1))) {
+    "work with a massive chain of drops" in new OneBoundedSetup[Int](Vector.fill(chainLength / 1000)(dropOne): _*) {
       lastEvents() should be(Set.empty)
 
       downstream.requestOne()

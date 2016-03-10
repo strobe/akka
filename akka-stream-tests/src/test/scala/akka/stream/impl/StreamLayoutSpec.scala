@@ -1,13 +1,12 @@
 /**
- * Copyright (C) 2015-2016 Typesafe Inc. <http://www.typesafe.com>
+ * Copyright (C) 2015-2016 Lightbend Inc. <http://www.lightbend.com>
  */
 package akka.stream.impl
 
 import akka.stream.scaladsl._
-import akka.stream.testkit.AkkaSpec
+import akka.testkit.AkkaSpec
 import org.reactivestreams.{ Subscription, Subscriber, Publisher }
 import akka.stream._
-import akka.event.Logging.simpleName
 
 class StreamLayoutSpec extends AkkaSpec {
   import StreamLayout._

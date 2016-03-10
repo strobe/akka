@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009-2016 Typesafe Inc. <http://www.typesafe.com>
+ * Copyright (C) 2009-2016 Lightbend Inc. <http://www.lightbend.com>
  */
 
 package akka.persistence
@@ -12,7 +12,6 @@ import akka.actor.Cancellable
 import akka.actor.Stash
 import akka.actor.StashFactory
 import akka.actor.UntypedActor
-import akka.dispatch.Envelope
 import akka.actor.ActorLogging
 
 /**

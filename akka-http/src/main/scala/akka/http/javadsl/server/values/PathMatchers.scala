@@ -1,21 +1,19 @@
 /*
- * Copyright (C) 2009-2016 Typesafe Inc. <http://www.typesafe.com>
+ * Copyright (C) 2009-2016 Lightbend Inc. <http://www.lightbend.com>
  */
 
 package akka.http.javadsl.server.values
 
 import java.util.Optional
-import java.util.regex.Pattern
 import java.{ lang ⇒ jl, util ⇒ ju }
 
 import akka.http.impl.server.PathMatcherImpl
 import akka.http.javadsl.server.RequestVal
-import akka.http.scaladsl.server.{ PathMatcher0, PathMatcher1, PathMatchers ⇒ ScalaPathMatchers, PathMatcher ⇒ ScalaPathMatcher }
+import akka.http.scaladsl.server.{ PathMatcher0, PathMatcher1, PathMatchers ⇒ ScalaPathMatchers }
 import akka.japi.function.Function
 
 import scala.collection.JavaConverters._
 import scala.reflect.ClassTag
-import scala.util.matching.Regex
 
 /**
  * A PathMatcher is used to match the (yet unmatched) URI path of incoming requests.

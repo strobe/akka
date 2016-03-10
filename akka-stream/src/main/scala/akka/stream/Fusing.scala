@@ -1,11 +1,9 @@
 /**
- * Copyright (C) 2015-2016 Typesafe Inc. <http://www.typesafe.com>
+ * Copyright (C) 2015-2016 Lightbend Inc. <http://www.lightbend.com>
  */
 package akka.stream
 
-import java.{ util ⇒ ju }
 import scala.collection.immutable
-import scala.collection.JavaConverters._
 import akka.stream.impl.StreamLayout._
 import akka.stream.impl.fusing.{ Fusing ⇒ Impl }
 import scala.annotation.unchecked.uncheckedVariance

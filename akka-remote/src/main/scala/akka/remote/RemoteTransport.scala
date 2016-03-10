@@ -1,12 +1,12 @@
 /**
- * Copyright (C) 2009-2016 Typesafe Inc. <http://www.typesafe.com>
+ * Copyright (C) 2009-2016 Lightbend Inc. <http://www.lightbend.com>
  */
 
 package akka.remote
 
 import akka.AkkaException
 import akka.actor._
-import akka.event.{ Logging, LoggingAdapter }
+import akka.event.{ LoggingAdapter }
 import scala.collection.immutable
 import scala.concurrent.Future
 import scala.util.control.NoStackTrace
