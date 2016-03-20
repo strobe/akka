@@ -646,6 +646,10 @@ object MiMa extends AutoPlugin {
       ),
       "2.4.2" -> Seq(
         FilterAnyProblemStartingWith("akka.stream.impl.VirtualProcessor"),
+        ProblemFilters.exclude[IncompatibleResultTypeProblem]("akka.stream.impl.fusing.GraphInterpreter.execute"),
+        ProblemFilters.exclude[DirectMissingMethodProblem]("akka.stream.impl.fusing.GraphInterpreter.this"),
+        ProblemFilters.exclude[DirectMissingMethodProblem]("akka.stream.impl.fusing.GraphInterpreterShell.init"),
+        ProblemFilters.exclude[DirectMissingMethodProblem]("akka.stream.impl.fusing.GraphInterpreterShell.receive"),
         ProblemFilters.exclude[MissingClassProblem]("akka.stream.impl.Stages$Drop"),
         ProblemFilters.exclude[IncompatibleMethTypeProblem]("akka.stream.impl.MaterializerSession.assignPort"),
         ProblemFilters.exclude[MissingClassProblem]("akka.stream.impl.Stages$Drop$"),
@@ -671,9 +675,67 @@ object MiMa extends AutoPlugin {
         ProblemFilters.exclude[ReversedMissingMethodProblem]("akka.http.scaladsl.model.RequestEntity.withoutSizeLimit"),
         ProblemFilters.exclude[ReversedMissingMethodProblem]("akka.http.scaladsl.model.UniversalEntity.withoutSizeLimit"),
         ProblemFilters.exclude[ReversedMissingMethodProblem]("akka.http.scaladsl.model.ResponseEntity.withoutSizeLimit"),
+        // #19956 Remove exposed case classes in HTTP model
+        ProblemFilters.exclude[MissingTypesProblem]("akka.http.scaladsl.model.HttpRequest$"),
+        ProblemFilters.exclude[IncompatibleResultTypeProblem]("akka.http.scaladsl.model.HttpRequest.unapply"), // returned Option[HttpRequest], now returns HttpRequest – no Option allocations!
+        ProblemFilters.exclude[MissingMethodProblem]("akka.http.scaladsl.model.HttpRequest.<init>$default$1"),
+        ProblemFilters.exclude[MissingMethodProblem]("akka.http.scaladsl.model.HttpRequest.<init>$default$2"),
+        ProblemFilters.exclude[MissingMethodProblem]("akka.http.scaladsl.model.HttpRequest.<init>$default$3"),
+        ProblemFilters.exclude[MissingMethodProblem]("akka.http.scaladsl.model.HttpRequest.<init>$default$4"),
+        ProblemFilters.exclude[MissingMethodProblem]("akka.http.scaladsl.model.HttpRequest.<init>$default$5"),
+        ProblemFilters.exclude[MissingTypesProblem]("akka.http.scaladsl.model.HttpResponse"), // was a case class (Serializable, Product, Equals)
+        ProblemFilters.exclude[MissingMethodProblem]("akka.http.scaladsl.model.HttpResponse.productElement"),
+        ProblemFilters.exclude[MissingMethodProblem]("akka.http.scaladsl.model.HttpResponse.productArity"),
+        ProblemFilters.exclude[MissingMethodProblem]("akka.http.scaladsl.model.HttpResponse.canEqual"),
+        ProblemFilters.exclude[MissingMethodProblem]("akka.http.scaladsl.model.HttpResponse.productIterator"),
+        ProblemFilters.exclude[MissingMethodProblem]("akka.http.scaladsl.model.HttpResponse.productPrefix"),
+
+        ProblemFilters.exclude[MissingTypesProblem]("akka.http.scaladsl.model.HttpRequest"),
+        ProblemFilters.exclude[MissingMethodProblem]("akka.http.scaladsl.model.HttpRequest.productElement"),
+        ProblemFilters.exclude[MissingMethodProblem]("akka.http.scaladsl.model.HttpRequest.productArity"),
+        ProblemFilters.exclude[MissingMethodProblem]("akka.http.scaladsl.model.HttpRequest.canEqual"),
+        ProblemFilters.exclude[MissingMethodProblem]("akka.http.scaladsl.model.HttpRequest.productIterator"),
+        ProblemFilters.exclude[MissingMethodProblem]("akka.http.scaladsl.model.HttpRequest.productPrefix"),
+        ProblemFilters.exclude[MissingTypesProblem]("akka.http.scaladsl.model.HttpResponse$"),
+        ProblemFilters.exclude[IncompatibleResultTypeProblem]("akka.http.scaladsl.model.HttpResponse.unapply"), // returned Option[HttpRequest], now returns HttpRequest – no Option allocations!
+        ProblemFilters.exclude[MissingMethodProblem]("akka.http.scaladsl.model.HttpResponse.<init>$default$1"),
+        ProblemFilters.exclude[MissingMethodProblem]("akka.http.scaladsl.model.HttpResponse.<init>$default$2"),
+        ProblemFilters.exclude[MissingMethodProblem]("akka.http.scaladsl.model.HttpResponse.<init>$default$3"),
+        ProblemFilters.exclude[MissingMethodProblem]("akka.http.scaladsl.model.HttpResponse.<init>$default$4"),
 
         // #20014 should have been final always
-        ProblemFilters.exclude[FinalClassProblem]("akka.http.scaladsl.model.EntityStreamSizeException")
+        ProblemFilters.exclude[FinalClassProblem]("akka.http.scaladsl.model.EntityStreamSizeException"),
+
+        // #19849 content negotiation fixes
+        ProblemFilters.exclude[FinalClassProblem]("akka.http.scaladsl.marshalling.Marshal$UnacceptableResponseContentTypeException"),
+
+        // #20009 internal and shouldn't have been public
+        ProblemFilters.exclude[DirectMissingMethodProblem]("akka.stream.impl.QueueSource.completion"),
+
+        // #20015 simplify materialized value computation tree
+        ProblemFilters.exclude[FinalMethodProblem]("akka.stream.impl.StreamLayout#AtomicModule.subModules"),
+        ProblemFilters.exclude[FinalMethodProblem]("akka.stream.impl.StreamLayout#AtomicModule.downstreams"),
+        ProblemFilters.exclude[FinalMethodProblem]("akka.stream.impl.StreamLayout#AtomicModule.upstreams"),
+        ProblemFilters.exclude[FinalMethodProblem]("akka.stream.impl.Stages#DirectProcessor.toString"),
+        ProblemFilters.exclude[IncompatibleMethTypeProblem]("akka.stream.impl.MaterializerSession.materializeAtomic"),
+        ProblemFilters.exclude[ReversedMissingMethodProblem]("akka.stream.impl.MaterializerSession.materializeAtomic"),
+        ProblemFilters.exclude[MissingTypesProblem]("akka.stream.impl.Stages$StageModule"),
+        ProblemFilters.exclude[FinalMethodProblem]("akka.stream.impl.Stages#GroupBy.toString"),
+        ProblemFilters.exclude[MissingTypesProblem]("akka.stream.impl.FlowModule"),
+        ProblemFilters.exclude[DirectMissingMethodProblem]("akka.stream.impl.FlowModule.subModules"),
+        ProblemFilters.exclude[ReversedMissingMethodProblem]("akka.stream.impl.FlowModule.label"),
+        ProblemFilters.exclude[FinalClassProblem]("akka.stream.impl.fusing.GraphModule"),
+
+        // #15947 catch mailbox creation failures
+        ProblemFilters.exclude[DirectMissingMethodProblem]("akka.actor.RepointableActorRef.point"),
+        ProblemFilters.exclude[ReversedMissingMethodProblem]("akka.actor.dungeon.Dispatch.initWithFailure"),
+
+        // #19877 Source.queue termination support
+        ProblemFilters.exclude[IncompatibleMethTypeProblem]("akka.stream.impl.SourceQueueAdapter.this"),
+
+        // #19828
+        ProblemFilters.exclude[DirectAbstractMethodProblem]("akka.persistence.Eventsourced#ProcessingState.onWriteMessageComplete"),
+        ProblemFilters.exclude[ReversedAbstractMethodProblem]("akka.persistence.Eventsourced#ProcessingState.onWriteMessageComplete")
       )
     )
   }

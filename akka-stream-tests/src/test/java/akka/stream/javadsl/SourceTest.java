@@ -448,7 +448,6 @@ public class SourceTest extends StreamTest {
 
   @Test
   public void mustWorkFromFuture() throws Exception {
-    final JavaTestKit probe = new JavaTestKit(system);
     final Iterable<String> input = Arrays.asList("A", "B", "C");
     CompletionStage<String> future1 = Source.from(input).runWith(Sink.<String>head(), materializer);
     CompletionStage<String> future2 = Source.fromCompletionStage(future1).runWith(Sink.<String>head(), materializer);
@@ -484,6 +483,21 @@ public class SourceTest extends StreamTest {
     final List<Integer> result = f.toCompletableFuture().get(3, TimeUnit.SECONDS);
     assertEquals(result.size(), 10000);
     for (Integer i: result) assertEquals(i, (Integer) 42);
+  }
+  
+  @Test
+  public void mustBeAbleToUseQueue() throws Exception {
+    final Pair<SourceQueueWithComplete<String>, CompletionStage<List<String>>> x = 
+        Flow.of(String.class).runWith(
+            Source.queue(2, OverflowStrategy.fail()),
+            Sink.seq(), materializer);
+    final SourceQueueWithComplete<String> source = x.first();
+    final CompletionStage<List<String>> result = x.second();
+    source.offer("hello");
+    source.offer("world");
+    source.complete();
+    assertEquals(result.toCompletableFuture().get(3, TimeUnit.SECONDS),
+        Arrays.asList("hello", "world"));
   }
 
   @Test

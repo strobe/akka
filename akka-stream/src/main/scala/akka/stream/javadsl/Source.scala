@@ -24,6 +24,7 @@ import java.util.concurrent.CompletionStage
 import java.util.concurrent.CompletableFuture
 import scala.compat.java8.FutureConverters._
 import akka.stream.impl.SourceQueueAdapter
+import akka.stream.scaladsl.SourceQueueWithComplete
 
 /** Java API */
 object Source {
@@ -110,7 +111,7 @@ object Source {
    * `ConcurrentModificationException` or other more subtle errors may occur.
    */
   def from[O](iterable: java.lang.Iterable[O]): javadsl.Source[O, NotUsed] = {
-    // this adapter is not immutable if the the underlying java.lang.Iterable is modified
+    // this adapter is not immutable if the underlying java.lang.Iterable is modified
     // but there is not anything we can do to prevent that from happening.
     // ConcurrentModificationException will be thrown in some cases.
     val scalaIterable = new immutable.Iterable[O] {
@@ -304,7 +305,7 @@ object Source {
    * @param bufferSize size of buffer in element count
    * @param overflowStrategy Strategy that is used when incoming elements cannot fit inside the buffer
    */
-  def queue[T](bufferSize: Int, overflowStrategy: OverflowStrategy): Source[T, SourceQueue[T]] =
+  def queue[T](bufferSize: Int, overflowStrategy: OverflowStrategy): Source[T, SourceQueueWithComplete[T]] =
     new Source(scaladsl.Source.queue[T](bufferSize, overflowStrategy).mapMaterializedValue(new SourceQueueAdapter(_)))
 
 }
@@ -322,6 +323,8 @@ final class Source[+Out, +Mat](delegate: scaladsl.Source[Out, Mat]) extends Grap
   override def shape: SourceShape[Out] = delegate.shape
 
   private[stream] def module: StreamLayout.Module = delegate.module
+
+  override def toString: String = delegate.toString
 
   /** Converts this Java DSL element to its Scala DSL counterpart. */
   def asScala: scaladsl.Source[Out, Mat] = delegate
@@ -367,6 +370,9 @@ final class Source[+Out, +Mat](delegate: scaladsl.Source[Out, Mat]) extends Grap
    * }}}
    * The `combine` function is used to compose the materialized values of this flow and that
    * flow into the materialized value of the resulting Flow.
+   *
+   * It is recommended to use the internally optimized `Keep.left` and `Keep.right` combiners
+   * where appropriate instead of manually writing functions that pass through one of the values.
    */
   def viaMat[T, M, M2](flow: Graph[FlowShape[Out, T], M], combine: function.Function2[Mat, M, M2]): javadsl.Source[T, M2] =
     new Source(delegate.viaMat(flow)(combinerToScala(combine)))
@@ -406,6 +412,9 @@ final class Source[+Out, +Mat](delegate: scaladsl.Source[Out, Mat]) extends Grap
    * }}}
    * The `combine` function is used to compose the materialized values of this flow and that
    * Sink into the materialized value of the resulting Sink.
+   *
+   * It is recommended to use the internally optimized `Keep.left` and `Keep.right` combiners
+   * where appropriate instead of manually writing functions that pass through one of the values.
    */
   def toMat[M, M2](sink: Graph[SinkShape[Out], M], combine: function.Function2[Mat, M, M2]): javadsl.RunnableGraph[M2] =
     RunnableGraph.fromGraph(delegate.toMat(sink)(combinerToScala(combine)))
@@ -470,6 +479,9 @@ final class Source[+Out, +Mat](delegate: scaladsl.Source[Out, Mat]) extends Grap
    *
    * If this [[Source]] gets upstream error - no elements from the given [[Source]] will be pulled.
    *
+   * It is recommended to use the internally optimized `Keep.left` and `Keep.right` combiners
+   * where appropriate instead of manually writing functions that pass through one of the values.
+   *
    * @see [[#concat]].
    */
   def concatMat[T >: Out, M, M2](that: Graph[SourceShape[T], M],
@@ -507,6 +519,9 @@ final class Source[+Out, +Mat](delegate: scaladsl.Source[Out, Mat]) extends Grap
    *
    * If the given [[Source]] gets upstream error - no elements from this [[Source]] will be pulled.
    *
+   * It is recommended to use the internally optimized `Keep.left` and `Keep.right` combiners
+   * where appropriate instead of manually writing functions that pass through one of the values.
+   *
    * @see [[#prepend]].
    */
   def prependMat[T >: Out, M, M2](that: Graph[SourceShape[T], M],
@@ -531,6 +546,9 @@ final class Source[+Out, +Mat](delegate: scaladsl.Source[Out, Mat]) extends Grap
   /**
    * Attaches the given [[Sink]] to this [[Flow]], meaning that elements that passes
    * through will also be sent to the [[Sink]].
+   *
+   * It is recommended to use the internally optimized `Keep.left` and `Keep.right` combiners
+   * where appropriate instead of manually writing functions that pass through one of the values.
    *
    * @see [[#alsoTo]]
    */
@@ -574,6 +592,9 @@ final class Source[+Out, +Mat](delegate: scaladsl.Source[Out, Mat]) extends Grap
    *
    * If one of sources gets upstream error - stream completes with failure.
    *
+   * It is recommended to use the internally optimized `Keep.left` and `Keep.right` combiners
+   * where appropriate instead of manually writing functions that pass through one of the values.
+   *
    * @see [[#interleave]].
    */
   def interleaveMat[T >: Out, M, M2](that: Graph[SourceShape[T], M], segmentSize: Int,
@@ -598,6 +619,9 @@ final class Source[+Out, +Mat](delegate: scaladsl.Source[Out, Mat]) extends Grap
   /**
    * Merge the given [[Source]] to the current one, taking elements as they arrive from input streams,
    * picking randomly when several elements ready.
+   *
+   * It is recommended to use the internally optimized `Keep.left` and `Keep.right` combiners
+   * where appropriate instead of manually writing functions that pass through one of the values.
    *
    * @see [[#merge]].
    */
@@ -630,6 +654,9 @@ final class Source[+Out, +Mat](delegate: scaladsl.Source[Out, Mat]) extends Grap
    * waiting for elements, this merge will block when one of the inputs does not have more elements (and
    * does not complete).
    *
+   * It is recommended to use the internally optimized `Keep.left` and `Keep.right` combiners
+   * where appropriate instead of manually writing functions that pass through one of the values.
+   *
    * @see [[#mergeSorted]].
    */
   def mergeSortedMat[U >: Out, Mat2, Mat3](that: Graph[SourceShape[U], Mat2], comp: util.Comparator[U],
@@ -652,6 +679,9 @@ final class Source[+Out, +Mat](delegate: scaladsl.Source[Out, Mat]) extends Grap
 
   /**
    * Combine the elements of current [[Source]] and the given one into a stream of tuples.
+   *
+   * It is recommended to use the internally optimized `Keep.left` and `Keep.right` combiners
+   * where appropriate instead of manually writing functions that pass through one of the values.
    *
    * @see [[#zip]].
    */
@@ -678,6 +708,9 @@ final class Source[+Out, +Mat](delegate: scaladsl.Source[Out, Mat]) extends Grap
   /**
    * Put together the elements of current [[Source]] and the given one
    * into a stream of combined elements using a combiner function.
+   *
+   * It is recommended to use the internally optimized `Keep.left` and `Keep.right` combiners
+   * where appropriate instead of manually writing functions that pass through one of the values.
    *
    * @see [[#zipWith]].
    */
